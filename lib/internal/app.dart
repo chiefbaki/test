@@ -25,8 +25,11 @@ class MyApp extends StatelessWidget {
       child: BlocProvider(
         create: (context) =>
             WeatherBloc(repository: RepositoryProvider.of<WeatherRep>(context)),
-        child: ChangeNotifierProvider(
-          create: (context) => ThemeChange(),
+        child: MultiProvider(
+          providers: [
+            ChangeNotifierProvider(create: (context) => ThemeChange()),
+            
+          ],
           child: Builder(builder: (context) {
             return MaterialApp(
               title: 'Flutter Demo',
