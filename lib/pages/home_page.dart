@@ -32,16 +32,25 @@ class _HomePageState extends State<HomePage> {
     });
   }
 
-  void _decrementCounter() {
+  void decrementCounter() {
     if (_counter == 10) {
       isVisible = !isVisible;
     } else if (_counter == 1) {
       isVisible1 = !isVisible1;
     }
-    setState(() {
-      _counter--;
-    });
+
+    if (minusTwo == true) {
+      setState(() {
+        _counter -= 2;
+      });
+    } else {
+      setState(() {
+          _counter--;
+        });
+    }
   }
+
+  late bool minusTwo;
 
   bool isVisible = true;
   bool isVisible1 = false;
@@ -49,6 +58,9 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     final vm = Provider.of<ThemeChange>(context);
+
+    minusTwo = vm.isDark;
+
     Future<Position> getPosition() async {
       bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
       if (!serviceEnabled) {
@@ -87,29 +99,36 @@ class _HomePageState extends State<HomePage> {
                 builder: (context, state) {
                   if (state is WeatherLoading) {
                     return const Center(child: CircularProgressIndicator());
-                  }
-                  else if(state is WeatherSuccess){
+                  } else if (state is WeatherSuccess) {
                     return Column(
                       children: [
-                        Text("Weather for ${state.model.name}", style: const TextStyle(fontSize: 20),),
+                        Text(
+                          "Weather for ${state.model.name}",
+                          style: const TextStyle(fontSize: 20),
+                        ),
                         const SizedBox(
                           height: 20,
                         ),
-                        Text("Weather for ${state.model.main?.tempMin.toString()}", style: TextStyle(fontSize: 20),),
+                        Text(
+                          "Min temp ${state.model.main?.tempMin.toString()}",
+                          style: TextStyle(fontSize: 20),
+                        ),
                       ],
                     );
                   }
                   return const SizedBox();
                 },
-                
+              ),
+              const SizedBox(
+                height: 20,
               ),
               const Text(
                 'You have pushed the button this many times:',
               ),
               Text(
-                    '$_counter',
-                    style: Theme.of(context).textTheme.headlineMedium,
-                  )
+                '$_counter',
+                style: Theme.of(context).textTheme.headlineMedium,
+              )
             ],
           ),
         ),
@@ -158,7 +177,7 @@ class _HomePageState extends State<HomePage> {
                 Visibility(
                   visible: isVisible1,
                   child: FloatingActionButton(
-                    onPressed: _decrementCounter,
+                    onPressed: decrementCounter,
                     tooltip: 'Decrement',
                     child: const Icon(Icons.remove),
                   ),
