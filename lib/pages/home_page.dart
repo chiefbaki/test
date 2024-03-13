@@ -37,6 +37,8 @@ class _HomePageState extends State<HomePage> {
       isVisible = !isVisible;
     } else if (_counter == 1) {
       isVisible1 = !isVisible1;
+    }else if(_counter == 0){
+      isVisible1 = !isVisible1;
     }
 
     if (minusTwo == true) {
